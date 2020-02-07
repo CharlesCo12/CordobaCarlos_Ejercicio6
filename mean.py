@@ -25,10 +25,20 @@ def aprox(h):
     return A*B
 
 #Graficar
-plt.plot(mu,aprox(mu),'--',label='Gaussian Aproximation')
+N = 100000
+lista = [4]
+sigma_delta = 0.1
+for i in range(1,N):
+    propuesta  = lista[i-1] + np.random.normal(loc=0.0, scale=sigma_delta)
+    r = min(1,np.exp(L(propuesta)-L(lista[i-1])))
+    alpha = np.random.random()
+    if(alpha<r):
+        lista.append(propuesta)
+    else:
+        lista.append(lista[i-1])
 plt.plot(mu,proba_new,label='Data')
+_ = plt.hist(lista, density=True,bins=30)
 plt.xlabel('$\mu$')
 plt.ylabel(r'P($\mu|{x_{k}},{\sigma_k}$)')
 plt.title('$\mu_0$ = {:.2f} {} {:.2f}'.format(Mu_max,'$\pm$',Delta_Mu))
-plt.legend(loc=0.0)
 plt.savefig('mean.png')
